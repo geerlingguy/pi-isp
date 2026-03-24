@@ -2,6 +2,10 @@
 
 Run a Raspberry Pi as an old-school dial-up ISP for retro computers.
 
+The goal of this repository is to create the simplest possible dial-up emulation setup, not to create a full ISP-like setup with a PBX and multiple phone lines. Just one retro computer 'dialing up' to the Internet through a Raspberry Pi.
+
+For a more elaborate setup, check out [Doge Microsystems Dial-up pool](https://dogemicrosystems.ca/wiki/Dial-up_pool) instructions.
+
 ## Hardware Setup
 
 TODO:
