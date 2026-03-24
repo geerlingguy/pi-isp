@@ -38,9 +38,13 @@ To set up the Pi as a local ISP, run the Ansible playbook.
 ansible-playbook main.yml
 ```
 
-## Testing the server
+## Monitoring
 
-TODO.
+When 'dialing' the Pi, observe the mgetty logs:
+
+```
+sudo journalctl -fu mgetty
+```
 
 ## See also
 
