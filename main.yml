@@ -10,30 +10,98 @@
   roles:
     - geerlingguy.security
 
+  handlers:
+    - name: restart mgetty
+      ansible.builtin.service:
+        name: mgetty
+        state: restarted
+
   tasks:
     - name: Ensure dialup server software is installed.
-      package:
+      ansible.builtin.package:
         name:
           - ppp
           - mgetty
+          - iptables-persistent
         state: present
 
-    # /lib/systemd/system/mgetty.service template
-    # /etc/mgetty/mgetty.config template
+    - name: Deploy mgetty configuration.
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart mgetty
+      loop:
+        - src: mgetty.service.j2
+          dest: /etc/systemd/system/mgetty.service
+        - src: mgetty.config.j2
+          dest: /etc/mgetty/mgetty.config
+      register: mgetty_template
+
+    - name: Reload systemd daemon
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+      when: mgetty_template is changed
 
     - name: Ensure mgetty is running and enabled at boot.
-      service:
+      ansible.builtin.service:
         name: mgetty
         state: started
         enabled: true
 
-    # /etc/ppp/options template
-    # /etc/ppp/options.ttyUSB0 template
+    - name: Template PPP configuration files
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: '0600'
+      loop:
+        - src: ppp-options.j2
+          dest: /etc/ppp/options
+        - src: ppp-options.ttyUSB0.j2
+          dest: /etc/ppp/options.ttyUSB0
 
-    # TODO:
-    # sudo useradd -G dialout,dip,users -m -g users -s /usr/sbin/pppd dial
-    # sudo passwd dial  # Set a password for this user
-    # Edit /etc/ppp/pap-secrets and add `dial * "dial" *`
-    # Edit /etc/sysctl.conf and add `net.ipv4.ip_forward=1`
-    # Edit iptables:
-    #   iptables -t nat -A POSTROUTING -s 192.168.32.0/24 -o eth0 -j MASQUERADE
+    - name: Create the dial user.
+      ansible.builtin.user:
+        name: dial
+        group: users
+        groups: dialout,dip,users
+        append: true
+        home: /home/dial
+        create_home: true
+        shell: /usr/sbin/pppd
+        password: {{ dial_user_password }} "$6$vwspKuH9JXCEjJp3$NT7c0KSNAvNllaACKFswkMnHIdZqnfTchJCqQuBHE8w6/rS7yZ2RAM8Mm9Wb0RyVdF5sQf1OgAbThlCrpGrB91"
+        update_password: on_create
+
+    - name: Add dial user to pap-secrets.
+      ansible.builtin.lineinfile:
+        path: /etc/ppp/pap-secrets
+        line: 'dial * "dial" *'
+        owner: root
+        group: root
+        mode: '0600'
+        create: yes
+
+    - name: Enable IPv4 forwarding in sysctl.
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_set: yes
+        state: present
+        reload: yes
+
+    - name: Configure NAT masquerade for the 192.168.32.0/24 subnet
+      ansible.builtin.iptables:
+        table: nat
+        chain: POSTROUTING
+        source: 192.168.32.0/24
+        out_interface: eth0
+        jump: MASQUERADE
+      register: iptables_change
+
+    - name: Save iptables rules if they changed
+      ansible.builtin.command: netfilter-persistent save
+      when: iptables_change.changed

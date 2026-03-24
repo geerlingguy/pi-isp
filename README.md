@@ -8,12 +8,17 @@ For a more elaborate setup, check out [Doge Microsystems Dial-up pool](https://d
 
 ## Hardware Setup
 
-TODO:
+I'm using the following hardware:
 
-  - Raspberry Pi model recommendation
-  - USB modem recommendation
-  - Phone line simluator recommendation
-  - Wiring diagram or picture
+  - Raspberry Pi 3, 4, or 5 (or equivalent) ($35)
+  - [StarTech.com 56K USB Dial-up Modem](https://amzn.to/3NJMeTZ) ($45)
+  - [Viking DLE-200B Two-Way Line Simulator](https://amzn.to/3NnJETN) ($120)
+
+TODO: Add an image of the setup here.
+
+There are other hardware configurations you can use for a Pi-based dial-up ISP, and other ways to emulate phone lines for a little less money, but these devices can be purchased new and work reliably.
+
+_As an Amazon Associate, I earn from qualified purchases._
 
 ## Software Setup
 
