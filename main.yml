@@ -1,0 +1,11 @@
+---
+- name: Set up a Pi ISP.
+  hosts: all
+  become: true
+  gather_facts: true
+
+  vars_files:
+    - config.yml
+
+  roles:
+    - geerlingguy.security
