@@ -51,6 +51,7 @@ sudo journalctl -fu mgetty
 This project relies heavily on the research and guidance of other projects:
 
   - [Doge Microsystems Dial up server](https://dogemicrosystems.ca/wiki/Dial_up_server)
+  - [PPP Dialin Server](https://webmin.com/docs/modules/ppp-dialin-server/)
 
 ## License
 
