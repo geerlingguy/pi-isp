@@ -9,3 +9,31 @@
 
   roles:
     - geerlingguy.security
+
+  tasks:
+    - name: Ensure dialup server software is installed.
+      package:
+        name:
+          - ppp
+          - mgetty
+        state: present
+
+    # /lib/systemd/system/mgetty.service template
+    # /etc/mgetty/mgetty.config template
+
+    - name: Ensure mgetty is running and enabled at boot.
+      service:
+        name: mgetty
+        state: started
+        enabled: true
+
+    # /etc/ppp/options template
+    # /etc/ppp/options.ttyUSB0 template
+
+    # TODO:
+    # sudo useradd -G dialout,dip,users -m -g users -s /usr/sbin/pppd dial
+    # sudo passwd dial  # Set a password for this user
+    # Edit /etc/ppp/pap-secrets and add `dial * "dial" *`
+    # Edit /etc/sysctl.conf and add `net.ipv4.ip_forward=1`
+    # Edit iptables:
+    #   iptables -t nat -A POSTROUTING -s 192.168.32.0/24 -o eth0 -j MASQUERADE

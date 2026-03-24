@@ -1,0 +1,14 @@
+[Unit]
+Description=External Modem
+Documentation=man:mgetty(8)
+Requires=systemd-udev-settle.service
+After=systemd-udev-settle.service
+
+[Service]
+Type=simple
+ExecStart=/sbin/mgetty /dev/ttyUSB0
+Restart=always
+PIDFile=/var/run/mgetty.pid.ttyUSB0
+
+[Install]
+WantedBy=multi-user.target
