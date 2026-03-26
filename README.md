@@ -2,19 +2,19 @@
 
 Run a Raspberry Pi as an old-school dial-up ISP for retro computers.
 
+<p align="center"><img alt="Raspberry Pi ISP hardware" src="/resources/pi-isp-setup.jpeg" height="auto" width="600"></p>
+
 The goal of this repository is to create the simplest possible dial-up emulation setup, not to create a full ISP-like setup with a PBX and multiple phone lines. Just one retro computer 'dialing up' to the Internet through a Raspberry Pi.
 
 For a more elaborate setup, check out [Doge Microsystems Dial-up pool](https://dogemicrosystems.ca/wiki/Dial-up_pool) instructions.
 
 ## Hardware Setup
 
-I'm using the following hardware:
+I'm using the following hardware (pictured above):
 
   - Raspberry Pi 3, 4, or 5 (or equivalent) ($35)
   - [StarTech.com 56K USB Dial-up Modem](https://amzn.to/3NJMeTZ) ($45)
   - [Viking DLE-200B Two-Way Line Simulator](https://amzn.to/3NnJETN) ($120)
-
-TODO: Add an image of the setup here.
 
 There are other hardware configurations you can use for a Pi-based dial-up ISP, and other ways to emulate phone lines for a little less money, but these devices can be purchased new and work reliably.
 
