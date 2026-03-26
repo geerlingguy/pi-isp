@@ -61,8 +61,8 @@
       loop:
         - src: ppp-options.j2
           dest: /etc/ppp/options
-        - src: ppp-options.ttyUSB0.j2
-          dest: /etc/ppp/options.ttyUSB0
+        - src: "ppp-options.usb-device.j2"
+          dest: "/etc/ppp/options.{{ usb_modem_device }}"
 
     - name: Create the dial user.
       ansible.builtin.user:
@@ -73,7 +73,7 @@
         home: /home/dial
         create_home: true
         shell: /usr/sbin/pppd
-        password: {{ dial_user_password }} "$6$vwspKuH9JXCEjJp3$NT7c0KSNAvNllaACKFswkMnHIdZqnfTchJCqQuBHE8w6/rS7yZ2RAM8Mm9Wb0RyVdF5sQf1OgAbThlCrpGrB91"
+        password: "{{ dial_user_password }}"
         update_password: on_create
 
     - name: Add dial user to pap-secrets.

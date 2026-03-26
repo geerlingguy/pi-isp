@@ -6,9 +6,9 @@ After=systemd-udev-settle.service
 
 [Service]
 Type=simple
-ExecStart=/sbin/mgetty /dev/ttyUSB0
+ExecStart=/sbin/mgetty /dev/{{ usb_modem_device }}
 Restart=always
-PIDFile=/var/run/mgetty.pid.ttyUSB0
+PIDFile=/var/run/mgetty.pid.{{ usb_modem_device }}
 
 [Install]
 WantedBy=multi-user.target
