@@ -79,7 +79,8 @@
     - name: Add dial user to pap-secrets.
       ansible.builtin.lineinfile:
         path: /etc/ppp/pap-secrets
-        line: 'dial * "dial" *'
+        regexp: '^dial\s+'
+        line: 'dial * "" *'
         owner: root
         group: root
         mode: '0600'

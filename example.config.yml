@@ -1,5 +1,12 @@
 ---
 usb_modem_device: ttyACM0
 
-# To create: `openssl passwd -6` or `mkpasswd -m sha-512`
-dial_user_password: "$6$/.Cbh82jYrdZ/Jgx$AfCLEVtie1SZJzkRbe0PHpNDvCjNP8cw7GcFpWkJc33gCdhZNV4wuDRO5r.0BWTWTFRLM6NbbROxuLPR.M0m20"
+# The speed to negotiate for dialup connections. Set to 9600 if unstable.
+# Valid options: 9600, 19200, 38400, 57600, and 115200
+mgetty_data_speed: "57600"
+
+# Set to `nocrtscts` (software control) if setting data speed to 9600 or lower.
+ppp_flow_control: "crtscts"
+
+# Encrypt with `openssl passwd -6` or `mkpasswd -m sha-512`. Default: 'dialpi'.
+dial_user_password: "$6$YOt41d9tvZT/UcjF$e0djvJo8u1eTuXCyLxoocjV2abUoLBYu59p/oxYOWGvV/tiG4ONH9.ylhzk9HhvDiH4ePKcisZTY47xwFNOjw1"
