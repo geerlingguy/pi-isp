@@ -22,6 +22,8 @@ On the DLE-200B, to increase the data transfer speed to the maximum of 28.8K, sw
 
 Alternatively, the [DLE-300 Advanced Line Simulator](https://amzn.to/4dielnX) may handle higher data rates, up to 33.6. To get 56K speeds, you need a more elaborate setup.
 
+Plug the 56K USB Dial-up modem into the Pi, and plug a phone line from it into either of the DLE-200B's phone jacks. Then plug a phone line from the other DLE-200B phone jack into your old computer's modem.
+
 > _As an Amazon Associate, I earn from qualified purchases._
 
 ## Software Setup
@@ -43,6 +45,22 @@ ansible-playbook main.yml
 ```
 
 If you have the modem hooked up, the Pi should immediately be ready to answer a call (by default, after one ring).
+
+## Connecting from another computer
+
+> These instructions were written for an iBook running Mac OS 9. Dialup instructions vary widely depending on OS and era!
+
+Create a new Remote Access / Modem Dial-up profile, and put in any phone number you like (e.g. `1` or `314`, or even a full phone number).
+
+The default username and password are `dial` and `dialpi`.
+
+<p align="center"><img alt="iBook G3 Remote Access modem connection" src="/resources/mac-os-9-ibook-dialup-remote-access.png" height="auto" width="300"></p>
+
+Make sure your TCP/IP settings are set to PPP (so it uses the modem connection), and Connect using the Remote Access application.
+
+You should hear the modem dialing the number, and then a modem handshake. After a little more time while the modem quietly authenticates, your old computer _should_ be connected.
+
+> Note: Internet security is _your_ responsibility. I wouldn't leave an old computer connected to the Internet for long periods of time, especially if you go browsing random websites!
 
 ## Monitoring
 
