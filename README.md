@@ -64,6 +64,28 @@ You should hear the modem dialing the number, and then a modem handshake. After 
 
 Some setups will not run stably at higher speeds, even 33.6 kbps; if you are having connection stability issues, try forcing a lower max modem speed by adjusting the `mgetty_modem_max_speed` variable.
 
+## Proxying Web Traffic
+
+By default, this project also installs [Macproxy Classic](https://github.com/rdmark/macproxy_classic), an HTTP proxy which allows many modern websites to be browsed on vintage browsers, by stripping elements that fail to load on old browsers.
+
+You can disable this with the configuration setting `macproxy_classic_enable`, but if it's enabled, all you need to do to use it—assuming you've dialed into the Pi already—is enter the correct proxy settings on your old browser.
+
+Here's the correct setting for Internet Explorer 5.0 on an old Mac:
+
+<p align="center"><img alt="iBook G3 Remote Access modem connection" src="/resources/internet-explorer-proxy-preferences.png" height="auto" width="400"></p>
+
+By default, the Pi ISP's services are accessible at the IP address `192.168.32.1` (this, as well as the remote device's assigned IP, is configured in the `ppp-options` file, and is currently not configurable through this project's `config.yml`).
+
+Set the HTTP proxy to `192.168.32.1`, and update the `port` to `5001`, and web traffic should go through the proxy now.
+
+There are some websites that run fine _without_ the proxy (e.g. [FrogFind](https://frogfind.com) and [Macintosh Garden](https://macintoshgarden.org)), you can add them to the bypass list.
+
+### Browse the web like it's 1999
+
+Macproxy Classic also includes a Wayback Machine extension, that lets you set a date, and browse the internet as if it were that day, courtesy of Internet Archive's [Wayback Machine](https://web.archive.org).
+
+To enable it, browse to web.archive.org, and click 'Enable'. Then set a date, and start browsing the web. To get back to 'the real Internet', go to web.archive.org again, and click 'disable'.
+
 ## Monitoring
 
 When 'dialing' the Pi, observe the mgetty logs:

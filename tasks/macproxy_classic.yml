@@ -1,0 +1,41 @@
+---
+- name: Ensure Downloads directory exists.
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/Downloads"
+    state: directory
+    mode: '0755'
+
+- name: Clone macproxy_classic repository.
+  ansible.builtin.git:
+    repo: "https://github.com/rdmark/macproxy_classic.git"
+    dest: "{{ macproxy_classic_dest }}"
+    version: main
+
+# - name: Install Python pip requirements.
+#   ansible.builtin.pip:
+#     requirements: "{{ macproxy_classic_dest }}/requirements.txt"
+#     executable: pip3
+
+- name: Deploy macproxy service configuration.
+  ansible.builtin.template:
+    src: "macproxy.service.j2"
+    dest: "/etc/systemd/system/macproxy.service"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart macproxy
+  register: macproxy_service
+  become: true
+
+- name: Reload systemd daemon.
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  when: macproxy_service is changed
+  become: true
+
+- name: Ensure macproxy is enabled as configured.
+  ansible.builtin.service:
+    name: macproxy
+    state: "{{ macproxy_classic_enable | ternary('started', 'stopped') }}"
+    enabled: "{{ macproxy_classic_enable }}"
+  become: true

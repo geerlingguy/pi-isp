@@ -1,7 +1,7 @@
 ---
 - name: Set up a Pi ISP.
   hosts: all
-  become: true
+  become: false
   gather_facts: true
 
   vars_files:
@@ -16,6 +16,11 @@
         name: mgetty
         state: restarted
 
+    - name: restart macproxy
+      ansible.builtin.service:
+        name: macproxy
+        state: restarted
+
   tasks:
     - name: Ensure dialup server software is installed.
       ansible.builtin.package:
@@ -24,6 +29,7 @@
           - mgetty
           - iptables-persistent
         state: present
+      become: true
 
     - name: Deploy mgetty configuration.
       ansible.builtin.template:
@@ -39,17 +45,20 @@
         - src: mgetty.config.j2
           dest: /etc/mgetty/mgetty.config
       register: mgetty_template
+      become: true
 
-    - name: Reload systemd daemon
+    - name: Reload systemd daemon.
       ansible.builtin.systemd_service:
         daemon_reload: true
       when: mgetty_template is changed
+      become: true
 
     - name: Ensure mgetty is running and enabled at boot.
       ansible.builtin.service:
         name: mgetty
         state: started
         enabled: true
+      become: true
 
     - name: Template PPP configuration files
       ansible.builtin.template:
@@ -63,6 +72,7 @@
           dest: /etc/ppp/options
         - src: "ppp-options.usb-device.j2"
           dest: "/etc/ppp/options.{{ usb_modem_device }}"
+      become: true
 
     - name: Create the dial user.
       ansible.builtin.user:
@@ -75,6 +85,7 @@
         shell: /usr/sbin/pppd
         password: "{{ dial_user_password }}"
         update_password: on_create
+      become: true
 
     - name: Add dial user to pap-secrets.
       ansible.builtin.lineinfile:
@@ -84,15 +95,17 @@
         owner: root
         group: root
         mode: '0600'
-        create: yes
+        create: true
+      become: true
 
     - name: Enable IPv4 forwarding in sysctl.
       ansible.posix.sysctl:
         name: net.ipv4.ip_forward
         value: '1'
-        sysctl_set: yes
+        sysctl_set: true
         state: present
-        reload: yes
+        reload: true
+      become: true
 
     - name: Configure NAT masquerade for the 192.168.32.0/24 subnet
       ansible.builtin.iptables:
@@ -102,7 +115,12 @@
         out_interface: eth0
         jump: MASQUERADE
       register: iptables_change
+      become: true
 
     - name: Save iptables rules if they changed
       ansible.builtin.command: netfilter-persistent save
       when: iptables_change.changed
+      become: true
+
+    - name: Include Macproxy Classic setup tasks.
+      ansible.builtin.import_tasks: tasks/macproxy_classic.yml
