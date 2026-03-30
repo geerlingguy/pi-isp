@@ -72,6 +72,7 @@
           dest: /etc/ppp/options
         - src: "ppp-options.usb-device.j2"
           dest: "/etc/ppp/options.{{ usb_modem_device }}"
+      notify: restart mgetty
       become: true
 
     - name: Create the dial user.
