@@ -62,6 +62,8 @@ You should hear the modem dialing the number, and then a modem handshake. After 
 
 > Note: Internet security is _your_ responsibility. I wouldn't leave an old computer connected to the Internet for long periods of time, especially if you go browsing random websites!
 
+Some setups will not run stably at higher speeds, even 33.6 kbps; if you are having connection stability issues, try forcing a lower max modem speed by adjusting the `mgetty_modem_max_speed` variable.
+
 ## Monitoring
 
 When 'dialing' the Pi, observe the mgetty logs:

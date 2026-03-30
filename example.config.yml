@@ -1,9 +1,13 @@
 ---
 usb_modem_device: ttyACM0
 
-# The speed to negotiate for dialup connections. Set to lower rate if unstable.
+# The data speed is for mgetty's internal connection to the modem.
 # Valid options: 9600, 19200, 38400, 57600, and 115200
 mgetty_data_speed: "38400"
+
+# The modem max speed is for mgetty's negotation with a remote modem.
+# Valid options: 9600, 14400, 33600, etc. (mgetty_data_speed must be larger)
+mgetty_modem_max_speed: "33600"
 
 # Set to `nocrtscts` (software control) if setting data speed to 9600 or lower.
 ppp_flow_control: "crtscts"

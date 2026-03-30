@@ -11,5 +11,5 @@ port {{ usb_modem_device }}
  rings 1
  #autobauding yes
  speed {{ mgetty_data_speed }}
- # How to initialize the modem (ignore Caller ID)
- init-chat "" ATZ OK AT+VCID=0 OK
+ # Initialize the modem (ignore Caller ID, set a max speed)
+ init-chat "" ATZ OK AT+VCID=0 OK AT+MS=V34,1,9600,{{ mgetty_modem_max_speed }} OK
