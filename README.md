@@ -64,6 +64,8 @@ You should hear the modem dialing the number, and then a modem handshake. After 
 
 Some setups will not run stably at higher speeds, even 33.6 kbps; if you are having connection stability issues, try forcing a lower max modem speed by adjusting the `mgetty_modem_max_speed` variable.
 
+> If you ever wanted to hear the various 'sounds of dialup', [this is about the best overview I've seen](https://archive.goughlui.com/legacy/soundofmodems/index.htm), with modem handshakes from 300 bps up to 56K.
+
 ## Proxying Web Traffic
 
 By default, this project also installs [Macproxy Classic](https://github.com/rdmark/macproxy_classic), an HTTP proxy which allows many modern websites to be browsed on vintage browsers, by stripping elements that fail to load on old browsers.
